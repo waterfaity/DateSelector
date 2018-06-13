@@ -1,0 +1,23 @@
+<resources>
+
+    <!--&lt;!&ndash; Base application theme. &ndash;&gt;-->
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+    <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+    <!--<item name="colorPrimary">@color/colorPrimary</item>-->
+    <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+    <!--<item name="colorAccent">@color/colorAccent</item>-->
+    <!--</style>-->
+
+    <style name="dialogButton" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:minHeight">40dip</item>
+        <item name="android:minWidth">60dip</item>
+    </style>
+
+    <style name="calendarTheme" parent="Theme.AppCompat.DayNight">
+        <item name="colorAccent">#FF4081</item>
+    </style>
+
+    <!--<color name="colorPrimary">#3F51B5</color>-->
+    <!--<color name="colorPrimaryDark">#303F9F</color>-->
+    <!--<color name="colorAccent">#FF4081</color>-->
+</resources>

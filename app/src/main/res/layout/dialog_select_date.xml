@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#FFFFFF"
+                android:paddingBottom="10dp"
+                android:orientation="vertical">
+
+
+    <CalendarView
+        android:theme="@style/calendarTheme"
+        android:id="@+id/calendar"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"/>
+
+    <Button
+        android:layout_marginRight="16dp"
+        android:id="@+id/positive"
+        style="@style/dialogButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/calendar"
+        android:paddingLeft="1dp"
+        android:paddingRight="1dp"
+        android:text="确定"
+        android:textColor="@color/colorDialogButton"/>
+
+    <Button
+        android:textSize="13sp"
+        android:id="@+id/negative"
+        style="@style/dialogButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/calendar"
+        android:layout_toLeftOf="@+id/positive"
+        android:text="取消"
+        android:textColor="@color/colorDialogButton"/>
+
+
+</RelativeLayout>
