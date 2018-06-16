@@ -49,7 +49,7 @@ public class DateSelectDialog extends Dialog implements View.OnClickListener, Ca
         findView();
         initView();
     }
-    public void setBeforeLimit(int limitBefore) {
+    public void setBeforeLimit(long limitBefore) {
         this.limitBefore = limitBefore;
     }
 
