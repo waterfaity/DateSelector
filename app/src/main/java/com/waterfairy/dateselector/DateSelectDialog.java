@@ -49,6 +49,13 @@ public class DateSelectDialog extends Dialog implements View.OnClickListener, Ca
         findView();
         initView();
     }
+    public void setBeforeLimit(int limitBefore) {
+        this.limitBefore = limitBefore;
+    }
+
+    public void setAfterLimit(long limitAfter) {
+        this.limitAfter = limitAfter;
+    }
 
     public void setBeforeLimit(int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
@@ -56,13 +63,6 @@ public class DateSelectDialog extends Dialog implements View.OnClickListener, Ca
         limitBefore = calendar.getTimeInMillis();
     }
 
-    public void setLimitBefore(int limitBefore) {
-        this.limitBefore = limitBefore;
-    }
-
-    public void setLimitAfter(long limitAfter) {
-        this.limitAfter = limitAfter;
-    }
 
     public void setAfterLimit(int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
