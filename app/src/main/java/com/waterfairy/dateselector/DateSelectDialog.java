@@ -2,7 +2,6 @@ package com.waterfairy.dateselector;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * @author water_fairy
@@ -37,11 +37,11 @@ public class DateSelectDialog extends Dialog implements View.OnClickListener, Ca
     private long limitBefore = -1;
     private long limitAfter = -1;
 
-    public DateSelectDialog(@NonNull Context context, OnDateSelectListener selectListener) {
+    public DateSelectDialog(Context context, OnDateSelectListener selectListener) {
         this(context, -1, -1, -1, selectListener);
     }
 
-    public DateSelectDialog(@NonNull Context context, int year, int month, int dayOfMonth, OnDateSelectListener selectListener) {
+    public DateSelectDialog(Context context, int year, int month, int dayOfMonth, OnDateSelectListener selectListener) {
         super(context);
         colorNormal = context.getResources().getColor(R.color.colorDialogButton);
         colorCannotClick = context.getResources().getColor(R.color.colorDialogButton2);
@@ -76,7 +76,7 @@ public class DateSelectDialog extends Dialog implements View.OnClickListener, Ca
     }
 
     private Calendar getCalendar(long limitTime) {
-        Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance(Locale.CHINA);
         calendar.setTimeInMillis(limitTime);
         return calendar;
     }
@@ -86,8 +86,9 @@ public class DateSelectDialog extends Dialog implements View.OnClickListener, Ca
     }
 
     private long getTime(int year, int month, int day) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day);
+        Calendar calendar = Calendar.getInstance(Locale.CHINA);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(year, month, day, 0, 0, 0);
         return calendar.getTimeInMillis();
     }
 
@@ -105,7 +106,7 @@ public class DateSelectDialog extends Dialog implements View.OnClickListener, Ca
 
     private void initView() {
         if (year != -1) {
-            Calendar calendar = Calendar.getInstance();
+            Calendar calendar = Calendar.getInstance(Locale.CHINA);
             calendar.set(year, month, dayOfMonth);
             mCalendarView.setDate(calendar.getTimeInMillis());
         }
@@ -127,11 +128,8 @@ public class DateSelectDialog extends Dialog implements View.OnClickListener, Ca
     }
 
     @Override
-    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, dayOfMonth);
-        long currentTime = calendar.getTimeInMillis();
-
+    public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+        long currentTime = getTime(year, month, dayOfMonth);
         if (limitAfter > 0 && limitAfter < currentTime) {
             mBTEnsure.setTextColor(colorCannotClick);
             mBTEnsure.setClickable(false);
@@ -171,7 +169,7 @@ public class DateSelectDialog extends Dialog implements View.OnClickListener, Ca
         if (showToast) {
             String msg = "";
             if (after) {
-                String limitDay = new SimpleDateFormat("yyyy年MM月dd日").format(new Date(limitTime - 24 * 60 * 60 * 1000));
+                String limitDay = new SimpleDateFormat("yyyy年MM月dd日").format(new Date(limitTime));
                 msg = "日期不能在" + limitDay + "之后";
             } else {
                 String limitDay = new SimpleDateFormat("yyyy年MM月dd日").format(new Date(limitTime));
