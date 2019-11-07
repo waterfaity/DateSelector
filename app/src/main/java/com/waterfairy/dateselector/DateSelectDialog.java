@@ -54,25 +54,46 @@ public class DateSelectDialog extends Dialog implements View.OnClickListener, Ca
         findView();
         initView();
     }
+
+    /**
+     * 开始可选的日期(前一天不可选择)
+     *
+     * @param limitBefore
+     */
     public void setBeforeLimit(long limitBefore) {
-        this.limitBefore = limitBefore;
+        Calendar calendar = getCalendar(limitBefore);
+        setBeforeLimit(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
     }
 
+    /**
+     * 结束可选的日期(后一天不可选择)
+     *
+     * @param limitAfter
+     */
     public void setAfterLimit(long limitAfter) {
-        this.limitAfter = limitAfter;
+        Calendar calendar = getCalendar(limitAfter);
+        setAfterLimit(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+    }
+
+    private Calendar getCalendar(long limitTime) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(limitTime);
+        return calendar;
     }
 
     public void setBeforeLimit(int year, int month, int day) {
+        limitBefore = getTime(year, month, day);
+    }
+
+    private long getTime(int year, int month, int day) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, day);
-        limitBefore = calendar.getTimeInMillis();
+        return calendar.getTimeInMillis();
     }
 
 
     public void setAfterLimit(int year, int month, int day) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day);
-        limitAfter = calendar.getTimeInMillis() + 24 * 60 * 60 * 1000;
+        limitAfter = getTime(year, month, day);
     }
 
 
@@ -119,7 +140,6 @@ public class DateSelectDialog extends Dialog implements View.OnClickListener, Ca
             mBTEnsure.setTextColor(colorCannotClick);
             mBTEnsure.setClickable(false);
             showOver(false, limitBefore, currentTime);
-
         } else {
             mBTEnsure.setTextColor(colorNormal);
             mBTEnsure.setClickable(true);
@@ -150,10 +170,11 @@ public class DateSelectDialog extends Dialog implements View.OnClickListener, Ca
         }
         if (showToast) {
             String msg = "";
-            String limitDay = new SimpleDateFormat("yyyy年MM月dd日").format(new Date(limitTime-1));
             if (after) {
+                String limitDay = new SimpleDateFormat("yyyy年MM月dd日").format(new Date(limitTime - 24 * 60 * 60 * 1000));
                 msg = "日期不能在" + limitDay + "之后";
             } else {
+                String limitDay = new SimpleDateFormat("yyyy年MM月dd日").format(new Date(limitTime));
                 msg = "日期不能在" + limitDay + "之前";
             }
             Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
