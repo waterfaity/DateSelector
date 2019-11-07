@@ -150,7 +150,7 @@ public class DateSelectDialog extends Dialog implements View.OnClickListener, Ca
         }
         if (showToast) {
             String msg = "";
-            String limitDay = new SimpleDateFormat("yyyy年MM月dd日").format(new Date(limitTime));
+            String limitDay = new SimpleDateFormat("yyyy年MM月dd日").format(new Date(limitTime-1));
             if (after) {
                 msg = "日期不能在" + limitDay + "之后";
             } else {
