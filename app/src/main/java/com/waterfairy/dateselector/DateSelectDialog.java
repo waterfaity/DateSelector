@@ -9,8 +9,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * @author water_fairy
@@ -26,8 +29,10 @@ public class DateSelectDialog extends Dialog implements View.OnClickListener, Ca
     private Button mBTEnsure;
     private Button mBTCancel;
     private OnDateSelectListener onDateSelectListener;
+    private OnDateSelectOverListener onDateSelectOverListener;
     private int colorNormal, colorCannotClick;
     private Object object;
+    private boolean showToast = true;
 
     private long limitBefore = -1;
     private long limitAfter = -1;
@@ -105,9 +110,16 @@ public class DateSelectDialog extends Dialog implements View.OnClickListener, Ca
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, dayOfMonth);
         long currentTime = calendar.getTimeInMillis();
-        if (limitAfter > 0 && limitAfter < currentTime || limitBefore > 0 && limitBefore > currentTime) {
+
+        if (limitAfter > 0 && limitAfter < currentTime) {
             mBTEnsure.setTextColor(colorCannotClick);
             mBTEnsure.setClickable(false);
+            showOver(true, limitAfter, currentTime);
+        } else if (limitBefore > 0 && limitBefore > currentTime) {
+            mBTEnsure.setTextColor(colorCannotClick);
+            mBTEnsure.setClickable(false);
+            showOver(false, limitBefore, currentTime);
+
         } else {
             mBTEnsure.setTextColor(colorNormal);
             mBTEnsure.setClickable(true);
@@ -117,8 +129,49 @@ public class DateSelectDialog extends Dialog implements View.OnClickListener, Ca
         }
     }
 
+    public boolean isShowToast() {
+        return showToast;
+    }
+
+    public void setShowToast(boolean showToast) {
+        this.showToast = showToast;
+    }
+
+    /**
+     * 不在限制区间内
+     *
+     * @param after
+     * @param limitTime
+     * @param currentTime
+     */
+    private void showOver(boolean after, long limitTime, long currentTime) {
+        if (onDateSelectOverListener != null) {
+            onDateSelectOverListener.onDateSelectOver(this, after, limitTime, currentTime);
+        }
+        if (showToast) {
+            String msg = "";
+            String limitDay = new SimpleDateFormat("yyyy年MM月dd日").format(new Date(limitTime));
+            if (after) {
+                msg = "日期不能在" + limitDay + "之后";
+            } else {
+                msg = "日期不能在" + limitDay + "之前";
+            }
+            Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void setOnDateSelectOverListener(OnDateSelectOverListener onDateSelectOverListener) {
+        this.onDateSelectOverListener = onDateSelectOverListener;
+    }
+
+
     public interface OnDateSelectListener {
         void onDateSelect(DateSelectDialog dateSelectDialog, int year, int month, int day);
+    }
+
+    public interface OnDateSelectOverListener {
+
+        void onDateSelectOver(DateSelectDialog dateSelectDialog, boolean isAfter, long limitTime, long currentTime);
     }
 
     public void setTag(Object object) {
